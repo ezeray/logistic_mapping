@@ -11,7 +11,7 @@ pub struct Config {
 
 impl Config {
 
-    pub fn new(args: &Vec<String>) -> Result<Config, &str> {
+    pub fn new(args: &[String]) -> Result<Config, &str> {
         if args.len() == 1 {
             return Ok(Config { 
                 num_rates: 10_000,
@@ -29,11 +29,11 @@ impl Config {
         let img_width = args[2].parse().unwrap();
         let img_height = args[3].parse().unwrap();
 
-        return Ok(Config { 
+        Ok(Config { 
             num_rates,
             img_width,
             img_height 
-        });
+        })
     }
 }
 
@@ -45,7 +45,7 @@ pub struct LogMapCoordinates {
 }
 
 pub fn log_mapper(x: f32, lambda: f32) -> f32 {
-    return lambda * x * (1.0 - x);
+    lambda * x * (1.0 - x)
 }
 
 pub fn calculate_end_points(initial: f32, lambda: f32) -> Vec<f32> {
@@ -63,14 +63,19 @@ pub fn calculate_end_points(initial: f32, lambda: f32) -> Vec<f32> {
     for _ in 1..ITERATIONS {
         pop = log_mapper(pop, lambda);
         // println!("rate {} generation {}", lambda, n);
-        if let Some(_) = results.iter().find(|v| (*v - pop).abs() < POP_DIFF) {
+        // base
+        // if let Some(_) = results.iter().find(|v| (*v - pop).abs() < POP_DIFF) {
+        // better
+        // if let Some(_) = results.iter().find(|v| (*v - pop).abs() < POP_DIFF) {
+        // best
+        if results.iter().any(|v| (*v - pop).abs() < POP_DIFF) {
             break;
         } else {
             results.push(pop);
         }
     }
     
-    return results;
+    results
 }
 
 pub fn calculate_mapping(min_rate: f32, max_rate: f32, num_rates: usize) -> LogMapCoordinates {

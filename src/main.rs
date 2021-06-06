@@ -1,5 +1,3 @@
-use logistic_map;
-use serde_json;
 use std::fs::File;
 use gnuplot::{Figure, Color, PointSymbol};
 use std::env;
@@ -27,7 +25,7 @@ fn main() {
         .expect("Error when serializing.");
 
     let mut fig = Figure::new();
-    let title = format!("Logistic Map Bifurcation Plot with {} iterations", config.num_rates);
+    let title = format!("Logistic Map Bifurcation Plot with {} rates", config.num_rates);
     fig.set_title(&title);
     fig.axes2d().points(
         &points_to_plot.x_values,
