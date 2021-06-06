@@ -2,6 +2,42 @@ use rand::prelude::*;
 use rand_pcg::Pcg64;
 use serde::{Serialize, Deserialize};
 
+#[derive(Debug)]
+pub struct Config {
+    pub num_rates: usize,
+    pub img_width: u32,
+    pub img_height: u32,
+}
+
+impl Config {
+
+    pub fn new(args: &Vec<String>) -> Result<Config, &str> {
+        if args.len() == 1 {
+            return Ok(Config { 
+                num_rates: 10_000,
+                img_width: 1800,
+                img_height: 1200 
+            });
+        }
+        if args.len() < 3 {
+            return Err("Missing line arguments");
+        } else if args.len() >= 5 {
+            return Err("Too many line arguments");
+        }
+        
+        let num_rates = args[1].parse().unwrap();
+        let img_width = args[2].parse().unwrap();
+        let img_height = args[3].parse().unwrap();
+
+        return Ok(Config { 
+            num_rates,
+            img_width,
+            img_height 
+        });
+    }
+}
+
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LogMapCoordinates {
     pub x_values: Vec<f32>,
