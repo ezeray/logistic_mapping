@@ -7,9 +7,7 @@ fn main() {
     let min_rate = 0.0;
     let max_rate = 4.0;
 
-    let args: Vec<String> = env::args().collect();
-
-    let config = logistic_map::Config::new(&args).unwrap_or_else(|err| {
+    let config = logistic_map::Config::new(env::args()).unwrap_or_else(|err| {
         eprintln!("Error encountered: {}", err);
         process::exit(2);
     });

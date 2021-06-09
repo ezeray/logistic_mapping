@@ -11,7 +11,7 @@ pub struct Config {
 
 impl Config {
 
-    pub fn new(args: &[String]) -> Result<Config, &str> {
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
         if args.len() == 1 {
             return Ok(Config { 
                 num_rates: 10_000,
@@ -19,20 +19,31 @@ impl Config {
                 img_height: 1200 
             });
         }
-        if args.len() < 3 {
-            return Err("Missing line arguments");
-        } else if args.len() >= 5 {
+        if args.len() >= 5 {
             return Err("Too many line arguments");
         }
-        
-        let num_rates = args[1].parse().unwrap();
-        let img_width = args[2].parse().unwrap();
-        let img_height = args[3].parse().unwrap();
+
+        args.next();
+
+        let num_rates = match args.next() {
+            Some(n) => n.parse().unwrap(),
+            None => return Err("Missing img_width"),
+        };
+
+        let img_width = match args.next() {
+            Some(n) => n.parse().unwrap(),
+            None => return Err("Missing img_width"),
+        };
+
+        let img_height = match args.next() {
+            Some(n) => n.parse().unwrap(),
+            None => return Err("Missing img_width"),
+        };
 
         Ok(Config { 
             num_rates,
             img_width,
-            img_height 
+            img_height,
         })
     }
 }
