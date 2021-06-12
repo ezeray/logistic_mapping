@@ -1,6 +1,8 @@
 use rand::prelude::*;
 use rand_pcg::Pcg64;
 use serde::{Serialize, Deserialize};
+use gnuplot::{Figure, Color, PointSymbol};
+
 
 #[derive(Debug)]
 pub struct Config {
@@ -50,7 +52,7 @@ impl Config {
 
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct LogMapCoordinates {
+pub struct GraphCoordinates {
     pub x_values: Vec<f32>,
     pub y_values: Vec<f32>,
 }
@@ -89,10 +91,10 @@ pub fn calculate_end_points(initial: f32, lambda: f32) -> Vec<f32> {
     results
 }
 
-pub fn calculate_mapping(min_rate: f32, max_rate: f32, num_rates: usize) -> LogMapCoordinates {
+pub fn calculate_mapping(min_rate: f32, max_rate: f32, num_rates: usize) -> GraphCoordinates {
     let mut rng = Pcg64::seed_from_u64(42);
 
-    let mut points = LogMapCoordinates{
+    let mut points = GraphCoordinates{
         x_values: vec![],
         y_values: vec![],
     };
@@ -124,6 +126,51 @@ pub fn calculate_mapping(min_rate: f32, max_rate: f32, num_rates: usize) -> LogM
 
     points
 
+}
+
+pub fn one_rate_evolution(initial: f32, lambda: f32) -> GraphCoordinates {
+    const ITERATIONS: usize = 500;
+    
+    let mut points = GraphCoordinates {
+        x_values: vec![0.; ITERATIONS + 1],
+        y_values: vec![initial; ITERATIONS + 1],
+    };
+
+    let mut pop = initial;
+
+    // code using iterators
+    for i in 1..=ITERATIONS {
+        pop = log_mapper(pop, lambda);
+
+        points.x_values[i] = i as f32;
+        points.y_values[i] = pop;
+
+    };
+
+    points
+}
+
+pub fn output_graph(
+    points: &GraphCoordinates, title: &str, graph_type: &str,
+    outpath: &str, img_width: u32, img_height: u32
+) {
+    let mut fig = Figure::new();
+    fig.set_title(title);
+    if graph_type == "lines" {
+        fig.axes2d().lines(
+            &points.x_values,
+            &points.y_values,
+            &[Color("black")]
+        );
+    } else if graph_type == "points" {
+        fig.axes2d().points(
+            &points.x_values,
+            &points.y_values,
+            &[PointSymbol('.'), Color("black")]
+        );
+    }
+    fig.save_to_png(outpath, img_width, img_height).unwrap();
+    fig.close();
 }
 
 #[cfg(test)]

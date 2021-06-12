@@ -1,5 +1,4 @@
 use std::fs::File;
-use gnuplot::{Figure, Color, PointSymbol};
 use std::env;
 use std::process;
 
@@ -12,6 +11,7 @@ fn main() {
         process::exit(2);
     });
 
+    // calcula el mapping completo, encontrando los puntos estables para todos los R en el itnervalo
     let points_to_plot = logistic_map::calculate_mapping(
         min_rate,
         max_rate,
@@ -22,14 +22,51 @@ fn main() {
     serde_json::to_writer(&file, &points_to_plot)
         .expect("Error when serializing.");
 
-    let mut fig = Figure::new();
-    let title = format!("Logistic Map Bifurcation Plot with {} rates", config.num_rates);
-    fig.set_title(&title);
-    fig.axes2d().points(
-        &points_to_plot.x_values,
-        &points_to_plot.y_values,
-        &[PointSymbol('.'), Color("black")]
+    let title_1 = format!("Logistic Map Bifurcation Plot with {} rates", config.num_rates);
+    logistic_map::output_graph(
+        &points_to_plot, &title_1, "points",
+        "./logistic_map_bifurcation.png", config.img_width, config.img_height
     );
-    fig.save_to_png("./logistic_map_bifurcation.png", config.img_width, config.img_height).unwrap();
-    fig.close();
+
+    let ejercicio_1_a_1 = logistic_map::one_rate_evolution(0.2, 2.);
+    let title = "Evolucion con poblacion inicial 0.2 y tasa 2.0";
+    logistic_map::output_graph(
+        &ejercicio_1_a_1, &title, "lines",
+        "./evolucion_pob-0.2_rate-2.png", config.img_width, config.img_height
+    );
+
+    let ejercicio_1_a_2 = logistic_map::one_rate_evolution(0.9, 2.);
+    let title = "Evolucion con poblacion inicial 0.9 y tasa 2.0";
+    logistic_map::output_graph(
+        &ejercicio_1_a_2, &title, "lines",
+        "./evolucion_pob-0.9_rate-2.png", config.img_width, config.img_height
+    );
+
+    let ejercicio_1_b_1 = logistic_map::one_rate_evolution(0.2, 3.1);
+    let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
+    logistic_map::output_graph(
+        &ejercicio_1_b_1, &title, "lines",
+        "./evolucion_pob-0.2_rate-3.1.png", config.img_width, config.img_height
+    );
+
+    let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.2, 4.);
+    let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
+    logistic_map::output_graph(
+        &ejercicio_1_d_2, &title, "lines",
+        "./evolucion_pob-0.2_rate-4.png", config.img_width, config.img_height
+    );
+
+    let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.200000001, 4.);
+    let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
+    logistic_map::output_graph(
+        &ejercicio_1_d_2, &title, "lines",
+        "./evolucion_pob-0.200000001_rate-4.png", config.img_width, config.img_height
+    );
+
+    let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.9, 4.);
+    let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
+    logistic_map::output_graph(
+        &ejercicio_1_d_2, &title, "lines",
+        "./evolucion_pob-0.9_rate-4.png", config.img_width, config.img_height
+    );
 }
