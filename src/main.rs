@@ -49,6 +49,13 @@ fn main() {
         "./evolucion_pob-0.2_rate-3.1.png", config.img_width, config.img_height
     );
 
+    let ejercicio_1_b_2 = logistic_map::one_rate_evolution(0.9, 3.1);
+    let title = "Evolucion con poblacion inicial 0.9 y tasa 3.1";
+    logistic_map::output_graph(
+        &ejercicio_1_b_2, &title, "lines",
+        "./evolucion_pob-0.2_rate-3.1.png", config.img_width, config.img_height
+    );
+
     let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.2, 4.);
     let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
     logistic_map::output_graph(
@@ -56,17 +63,17 @@ fn main() {
         "./evolucion_pob-0.2_rate-4.png", config.img_width, config.img_height
     );
 
-    let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.200000001, 4.);
+    let ejercicio_1_d_3 = logistic_map::one_rate_evolution(0.200000001, 4.);
     let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
     logistic_map::output_graph(
-        &ejercicio_1_d_2, &title, "lines",
+        &ejercicio_1_d_3, &title, "lines",
         "./evolucion_pob-0.200000001_rate-4.png", config.img_width, config.img_height
     );
 
-    let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.9, 4.);
+    let ejercicio_1_d_4 = logistic_map::one_rate_evolution(0.9, 4.);
     let title = "Evolucion con poblacion inicial 0.2 y tasa 3.1";
     logistic_map::output_graph(
-        &ejercicio_1_d_2, &title, "lines",
+        &ejercicio_1_d_4, &title, "lines",
         "./evolucion_pob-0.9_rate-4.png", config.img_width, config.img_height
     );
 }
