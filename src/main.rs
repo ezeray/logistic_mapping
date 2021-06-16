@@ -53,7 +53,7 @@ fn main() {
     let title = "Evolucion con poblacion inicial 0.9 y tasa 3.1";
     logistic_map::output_graph(
         &ejercicio_1_b_2, &title, "lines",
-        "./evolucion_pob-0.2_rate-3.1.png", config.img_width, config.img_height
+        "./evolucion_pob-0.9_rate-3.1.png", config.img_width, config.img_height
     );
 
     let ejercicio_1_d_2 = logistic_map::one_rate_evolution(0.2, 4.);
